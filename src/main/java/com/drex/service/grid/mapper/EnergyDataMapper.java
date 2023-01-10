@@ -4,10 +4,7 @@ import com.drex.service.expose.dto.reponse.EnergyDtoResponse;
 import com.drex.service.expose.dto.request.EnergyDtoRequest;
 import com.drex.service.grid.model.entity.EnergyData;
 import com.drex.service.grid.util.enums.CodeEnum;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -22,9 +19,8 @@ public interface EnergyDataMapper {
 
     List<EnergyData> toEntityList(List<EnergyDtoRequest> requests);
 
-    //@Mapping(target = "energyAccumulated", expression = "java(grid.getEnergyAccumulated() / 1000)")
     @Mapping(source = "energyAccumulated", target = "energyAccumulated", qualifiedByName = "energy")
-    EnergyDtoResponse toResponse(EnergyData grid);
+    EnergyDtoResponse toResponse(EnergyData energyData);
 
     List<EnergyDtoResponse> toResponseList(List<EnergyData> energyDataList);
 
@@ -36,5 +32,10 @@ public interface EnergyDataMapper {
     @Named("energy")
     default String formatToDecimal(Double energy) {
         return String.format("%.2f", energy);
+    }
+
+    @BeforeMapping
+    default void toKwh(EnergyData energyData) {
+        energyData.setEnergyAccumulated(energyData.getEnergyAccumulated() / 1000);
     }
 }

@@ -67,7 +67,6 @@ public class EnergyDataServiceImpl implements EnergyDataService {
         if (gridCode != null) {
             return energyDataRepository.getEnergyDataByDeviceCode(gridCode)
                     .map(mapper::toResponse);
-            //return listget(gridCode);
         } else {
             return energyDataRepository.findAll().map(mapper::toResponse);
         }
@@ -89,31 +88,6 @@ public class EnergyDataServiceImpl implements EnergyDataService {
     @Override
     public Flowable<Graphic> getGraphicByDeviceCode(String code, String time) {
         return energyDataRepository.getGraphicByDeviceCode(code, time);
-    }
-
-    private Flowable<EnergyDtoResponse> listget(String gridCode) {
-        return energyDataRepository.getEnergyDataByDeviceCode(gridCode)
-                .count()
-                .doOnSuccess(aLong -> System.out.println("Registre N°: " + aLong))
-                .flatMapPublisher(aLong -> Flowable.range(0, (int) (aLong / 100) + 12)
-                        .delay(500, TimeUnit.MILLISECONDS))
-                .doOnNext(integer -> System.out.println("Batch N°: " + (integer + 1)))
-                .flatMap(integer -> energyDataRepository.getByPaginable(gridCode, integer, 5))
-                .map(mapper::toResponse);
-                //.flatMapIterable(gridDtoResponse -> gridDtoResponse);
-
-        /*
-        Flowable.fromIterable(list)
-                .count()
-                .doOnSuccess(aLong -> System.out.println("Número de registros del csv: " + aLong))
-                .flatMapPublisher(aLong ->
-                        Flux.range(0, (int) Math.ceil((double) aLong / 10)).delayElements(Duration.ofMillis(500)))
-                .doOnNext(integer -> System.out.println("Batch N°: " + (integer + 1)))
-                .map(integer -> this.findPaginated(list, PageRequest.of(integer, 10)))
-                .flatMapCompletable(gridDtoRequests ->
-                        gridRepository.saveAll(Flowable.fromIterable(mapper.toEntityList(gridDtoRequests.toList())))
-                                .ignoreElements()).subscribe();
-                                */
     }
 
     private List<EnergyDtoRequest> csvToListEnergyData(InputStream inputStream) {

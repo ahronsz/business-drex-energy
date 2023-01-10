@@ -19,7 +19,7 @@ import javax.validation.constraints.Null;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(value = "/grid")
+@RequestMapping(value = "/energy")
 public class EnergyDataController {
 
     @Autowired
@@ -45,8 +45,7 @@ public class EnergyDataController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/list")
-    public Flowable<EnergyDtoResponse> list(
-            @Valid @Null @Param("code") String code) {
+    public Flowable<EnergyDtoResponse> list(@Valid @Null @Param("code") String code) {
         return energyDataService.list(code);
     };
 
