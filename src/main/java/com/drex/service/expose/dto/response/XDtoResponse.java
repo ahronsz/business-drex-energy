@@ -1,4 +1,4 @@
-package com.drex.service.grid.model.entity;
+package com.drex.service.expose.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,9 +10,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @Builder
-public class Graphic {
-
-    private Double energyAccumulated;
-    private Double energy;
+public class XDtoResponse {
     private LocalDateTime utcDateTime;
+    private OffsetDateTime localDateTime;
 }

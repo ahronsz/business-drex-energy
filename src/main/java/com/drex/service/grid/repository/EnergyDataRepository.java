@@ -15,9 +15,9 @@ public interface EnergyDataRepository extends RxJava3CrudRepository<EnergyData, 
     @Query("SELECT * FROM energy_data WHERE device_code = :code")
     Flowable<EnergyData> getEnergyDataByDeviceCode(String code);
 
-    @Query("SELECT to_char(date_trunc(:time, timestamp), 'yyyy-mm-dd hh24:mi:ss') as x, ROUND(MAX(energy_accumulated / 1000)::numeric, 2) as y FROM energy_data WHERE device_code = :code GROUP BY x ORDER BY x")
-    Flowable<Graphic> getGraphicByDeviceCode(String code, String time);
-
-    @Query("SELECT * FROM energy_data WHERE device_code = :code ORDER BY timestamp DESC OFFSET :offset LIMIT :limit")
-    Flowable<EnergyData> getByPaginable(String code, Integer offset, Integer limit);
+    @Query("SELECT date_trunc(:time, timestamp) as utc_date_time,\n" +
+            "       energy as energy,\n" +
+            "       MAX(energy_accumulated) as energy_accumulated\n" +
+            "FROM energy_data WHERE device_code = :deviceCode GROUP BY utc_date_time, energy ORDER BY utc_date_time")
+    Flowable<Graphic> getGraphicByDeviceCode(String deviceCode, String time);
 }

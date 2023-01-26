@@ -12,17 +12,18 @@ import javax.validation.constraints.NotNull;
 public class EnergyDtoRequest {
 
     @NotNull
-    @JsonProperty("device-code")
-    @CsvBindByName(column = "device-code")
+    @CsvBindByName(column = "deviceCode")
     private String deviceCode;
 
     @NotNull
-    @JsonProperty("energy-accumulated")
-    @CsvBindByName(column = "energy-accumulated")
+    @CsvBindByName(column = "energy")
+    private Double energy;
+
+    @NotNull
+    @CsvBindByName(column = "energyAccumulated")
     private Double energyAccumulated;
 
     @NotNull
-    @JsonProperty("timestamp")
-    @CsvBindByName(column = "timestamp")
+    @CsvBindByName(column = "posixTimestamp")
     private Long posixTimestamp;
 }

@@ -1,9 +1,8 @@
 package com.drex.service.grid.mapper;
 
-import com.drex.service.expose.dto.reponse.EnergyDtoResponse;
+import com.drex.service.expose.dto.response.EnergyDtoResponse;
 import com.drex.service.expose.dto.request.EnergyDtoRequest;
 import com.drex.service.grid.model.entity.EnergyData;
-import com.drex.service.grid.util.enums.CodeEnum;
 import org.mapstruct.*;
 
 import java.time.Instant;
@@ -19,7 +18,9 @@ public interface EnergyDataMapper {
 
     List<EnergyData> toEntityList(List<EnergyDtoRequest> requests);
 
-    @Mapping(source = "energyAccumulated", target = "energyAccumulated", qualifiedByName = "energy")
+    @Mapping(source = "energy", target = "energyMwh", qualifiedByName = "mwh")
+    @Mapping(source = "energyAccumulated", target = "energyAccumulatedMwh", qualifiedByName = "mwh")
+    @Mapping(source = "timestamp", target = "utcDateTime")
     EnergyDtoResponse toResponse(EnergyData energyData);
 
     List<EnergyDtoResponse> toResponseList(List<EnergyData> energyDataList);
@@ -30,12 +31,12 @@ public interface EnergyDataMapper {
     }
 
     @Named("energy")
-    default String formatToDecimal(Double energy) {
-        return String.format("%.2f", energy);
+    default String formatDecimal(Double energy) {
+        return String.format("%.4f", energy);
     }
 
-    @BeforeMapping
-    default void toKwh(EnergyData energyData) {
-        energyData.setEnergyAccumulated(energyData.getEnergyAccumulated() / 1000);
+    @Named("mwh")
+    default Double toMwh(Double kwh) {
+        return kwh != null ? kwh / 1000 : 0.00;
     }
 }

@@ -1,9 +1,9 @@
 package com.drex.service.expose.web;
 
-import com.drex.service.expose.dto.reponse.EnergyDtoResponse;
+import com.drex.service.expose.dto.response.EnergyDtoResponse;
 import com.drex.service.expose.dto.request.EnergyDtoRequest;
+import com.drex.service.expose.dto.response.GraphicDtoResponse;
 import com.drex.service.grid.business.EnergyDataService;
-import com.drex.service.grid.model.entity.Graphic;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -19,7 +19,8 @@ import javax.validation.constraints.Null;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(value = "/energy")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@RequestMapping(value = "/plant")
 public class EnergyDataController {
 
     @Autowired
@@ -29,12 +30,6 @@ public class EnergyDataController {
     @PostMapping
     public Completable record(@RequestBody EnergyDtoRequest energyDtoRequest) {
         return energyDataService.save(energyDtoRequest);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/count")
-    public Single<Long> record() {
-        return energyDataService.count();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,7 +46,7 @@ public class EnergyDataController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/graphic")
-    public Flowable<Graphic> getGraphic(
+    public Flowable<GraphicDtoResponse> getGraphic(
             @Valid @NotNull @Param("code") String code,
             @Valid @NotNull @Param("time") String time) {
         return energyDataService.getGraphicByDeviceCode(code, time);

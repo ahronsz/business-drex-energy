@@ -23,6 +23,9 @@ public class EnergyData {
     private String deviceCode;
 
     @Column
+    private Double energy;
+
+    @Column
     private Double energyAccumulated;
 
     @Column

@@ -1,7 +1,8 @@
 package com.drex.service.grid.business;
 
-import com.drex.service.expose.dto.reponse.EnergyDtoResponse;
+import com.drex.service.expose.dto.response.EnergyDtoResponse;
 import com.drex.service.expose.dto.request.EnergyDtoRequest;
+import com.drex.service.expose.dto.response.GraphicDtoResponse;
 import com.drex.service.grid.model.entity.Graphic;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -22,5 +23,5 @@ public interface EnergyDataService {
 
     Single<Long> count();
 
-    Flowable<Graphic> getGraphicByDeviceCode(String code, String time);
+    Flowable<GraphicDtoResponse> getGraphicByDeviceCode(String code, String time);
 }
